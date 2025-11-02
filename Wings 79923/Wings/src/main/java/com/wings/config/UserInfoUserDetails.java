@@ -4,14 +4,20 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.stereotype.Component;
 
 import com.wings.models.UserInfo;
+
 
 public class UserInfoUserDetails implements UserDetails {
 
 	private UserInfo userInfo;
+	
+	public UserInfoUserDetails(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 	
 	public UserInfo getUserInfo() {
 		return userInfo;
@@ -24,19 +30,20 @@ public class UserInfoUserDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return null;
+//		return null;
+		return List.of(new SimpleGrantedAuthority(userInfo.getRoles()));
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return null;
+		return userInfo.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return userInfo.getUsername();
 	}
 
 }

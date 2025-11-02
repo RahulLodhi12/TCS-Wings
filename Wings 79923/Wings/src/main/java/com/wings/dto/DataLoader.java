@@ -83,10 +83,12 @@ public class DataLoader implements CommandLineRunner {
 		//Create and save Product entities
 		Product product1 = new Product("Apple iPad 10.2 8th Gen Wifi iOS Tablet",29190,user3,cate1);
 		Product product2 = new Product("Crocin pain relief tablet",10,user4,cate2);
+		Product product3 = new Product("iPhone 69",98000,user4,cate1);
 		
 		//Ensure the product is saved correctly
 		productRepo.save(product1);
 		productRepo.save(product2);
+		productRepo.save(product3);
 		
 		System.out.println("Product Data got loaded in DB");
 		

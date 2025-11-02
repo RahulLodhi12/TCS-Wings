@@ -1,5 +1,6 @@
 package com.wings.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.wings.filter.JwtAuthFilter;
@@ -18,6 +20,7 @@ import com.wings.filter.JwtAuthFilter;
 @Configuration
 public class SecurityConfig {
 	
+	@Autowired
 	private JwtAuthFilter authFilter;
 	
 	
@@ -30,8 +33,18 @@ public class SecurityConfig {
 		return (web) -> web.ignoring().requestMatchers(new AntPathRequestMatcher("/h2-console/**"));
 	}
 	
+	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		return null;
+//		return null;
+		 http
+         .csrf(csrf -> csrf.disable())  // disable CSRF for APIs
+         .authorizeHttpRequests(auth -> auth
+             .requestMatchers("/auth/**", "/h2-console/**","/**","/api/**","/api/auth/consumer/cart").permitAll() // allow login/signup and H2
+             .anyRequest().authenticated()
+         )
+         .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+
+     return http.build();
 	}
 	
 	@Bean
@@ -46,7 +59,8 @@ public class SecurityConfig {
 	
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
-		return null;
+//		return null;
+		return config.getAuthenticationManager();
 	}
 
 }
