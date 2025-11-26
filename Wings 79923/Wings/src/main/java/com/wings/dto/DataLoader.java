@@ -88,7 +88,7 @@ public class DataLoader implements CommandLineRunner {
 		//Ensure the product is saved correctly
 		productRepo.save(product1);
 		productRepo.save(product2);
-		productRepo.save(product3);
+//		productRepo.save(product3);
 		
 		System.out.println("Product Data got loaded in DB");
 		
@@ -110,6 +110,9 @@ public class DataLoader implements CommandLineRunner {
 	
 		//Create and save CartProduct entities
 		CartProduct cartProduct1 = new CartProduct(cart1, savedProduct2, 2); // Product 1 in Cart 1
+		
+//		CartProduct cartProduct1 = new CartProduct(cart1, savedProduct1, 2); // Product 1 in Cart 1
+		
 		
 		cartProductRepo.save(cartProduct1);
 		

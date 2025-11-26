@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -23,9 +24,11 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthFilter authFilter;
 	
+	@Autowired
+	private UserInfoUserDetailsService userInfoUserDetailsService;
 	
 	UserDetailsService userDetailsService() {
-		return null;
+		return userInfoUserDetailsService;
 	}
 	
 	@Bean
@@ -55,7 +58,10 @@ public class SecurityConfig {
 	}
 	
 	AuthenticationProvider authenticationProvider() {
-		return null;
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+	    provider.setUserDetailsService(userDetailsService());
+	    provider.setPasswordEncoder(passwordEncoder());
+	    return provider;
 	}
 	
 	

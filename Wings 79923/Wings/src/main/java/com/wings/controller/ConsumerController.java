@@ -1,68 +1,11 @@
-//package com.wings.controller;
-//
-//import java.security.Principal;
-//
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//
-//import com.wings.models.CartProduct;
-//import com.wings.models.Product;
-//import com.wings.repository.CartProductRepo;
-//import com.wings.repository.CartRepo;
-//import com.wings.repository.ProductRepo;
-//import com.wings.repository.UserInfoRepository;
-//
-//@RequestMapping("/api/auth/consumer")
-//public class ConsumerController {
-//	
-//	ProductRepo productRepo;
-//	
-//	CartRepo cartRepo;
-//	
-//	CartProductRepo cpRepo;
-//	
-//	UserInfoRepository userRepo;
-//	
-//	@GetMapping("/cart")
-//	public ResponseEntity<Object> getCart(Principal principal){
-//		return null;
-//	}
-//	
-//	@PostMapping("/cart")
-//	public ResponseEntity<Object> postCart(Principal principal, Product product){
-//		return null;
-//	}
-//	
-//	@PutMapping("/cart")
-//	public ResponseEntity<Object> putCart(Principal principal, CartProduct cp){
-//		return null;
-//	}
-//	
-//	@DeleteMapping("/cart")
-//	public ResponseEntity<Object> deleteCart(Principal principal, Product product){
-//		return null;
-//	}
-//	
-//	
-//
-//}
-
-
-
-
-
 package com.wings.controller;
 
 import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -128,6 +71,13 @@ public class ConsumerController {
 		}
 
 		
+		// check duplicate for product -> CartId + ProductId 
+	    Optional<CartProduct> existing = cpRepo.findByCartIdAndProductId(cart.getCartId(), dbProduct.get().getProductId());
+
+	    if (existing.isPresent()) {
+	        return ResponseEntity.status(409).body("Product already exists in cart");
+	    }
+		
 		CartProduct cp = new CartProduct();
 		cp.setCart(cart);
 		cp.setProduct(dbProduct.get());
@@ -136,7 +86,7 @@ public class ConsumerController {
 		cp.setProductId(dbProduct.get().getProductId());
 		cpRepo.save(cp);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body("Product added to cart");
+		return ResponseEntity.status(200).body("Product added to cart");
 	}
 	
 	@PutMapping("/cart")

@@ -272,7 +272,6 @@ class WingsApplicationTests {
 		mvc.perform(get("/api/auth/seller/product")
 				.header("Authorization", "Bearer " + jwtToken))
 				.andExpect(status().is(200)).andExpect(content().string(containsString("iPhone 11")));
-				
 			
 	}
 	
@@ -349,7 +348,7 @@ class WingsApplicationTests {
 				.andExpect(content().string(not(containsString("iPhone 12"))));
 		
 		
-		mvc.perform(put("/api/auth/consumer/cart")
+		mvc.perform(post("/api/auth/consumer/cart")
 				.header("Authorization", "Bearer " + jwtToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(getProduct(Integer.parseInt(arr[arr.length-1]), "iPhone 12", 98000.0, 2, "Electronics").toString()))
@@ -405,7 +404,7 @@ class WingsApplicationTests {
 		.andExpect(status().is(200));
 		
 		
-		mvc.perform(put("/api/auth/consumer/cart")
+		mvc.perform(get("/api/auth/consumer/cart")
 				.header("Authorization", "Bearer " + jwtToken))
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("$.cartId", is(not(equalTo("")))))
@@ -477,11 +476,11 @@ class WingsApplicationTests {
 		
 		String[] arr = createdURI.split("/");
 		
-		mvc.perform(delete("/api/auth/seller/product" + Integer.valueOf(arr[arr.length-1]))
+		mvc.perform(delete("/api/auth/seller/product/" + Integer.valueOf(arr[arr.length-1]))
 				.header("Authorization", "Bearer " + jwtToken))
 				.andExpect(status().is(200));
 		
-		mvc.perform(get("/api/auth/seller/product" + Integer.valueOf(arr[arr.length-1]))
+		mvc.perform(get("/api/auth/seller/product/" + Integer.valueOf(arr[arr.length-1]))
 				.header("Authorization", "Bearer " + jwtToken))
 				.andExpect(status().is(404));
 	}

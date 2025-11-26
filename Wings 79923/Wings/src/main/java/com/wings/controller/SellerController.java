@@ -1,12 +1,13 @@
 package com.wings.controller;
 
 import java.net.URI;
+//import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.wings.models.Category;
+//import com.wings.models.Category;
 import com.wings.models.Product;
 import com.wings.repository.CategoryRepo;
 import com.wings.repository.ProductRepo;
@@ -40,22 +41,22 @@ public class SellerController {
 	
 	@PostMapping("/product")
 	public ResponseEntity<Object> postProduct(Principal principal, @RequestBody Product product){
+		 //Fetch logged-in user (seller)
+	    Optional<UserInfo> seller = userRepo.findByUsername(principal.getName());
+	    if(seller.isEmpty()) return ResponseEntity.status(404).body("User not found");
 
-		Category category = new Category();
-		category.setCategoryId(product.getCategory().getCategoryId());
-		category.setCategoryName(product.getCategory().getCategoryName());
-		categoryRepo.save(category);
-		
-		productRepo.save(product);
+	    //Attach seller to product
+	    product.setSeller(seller.get());
+
+	    productRepo.save(product);
 
 	    URI location = ServletUriComponentsBuilder
 	            .fromCurrentContextPath()
-	            .path("/product/{id}")
+	            .path("/api/auth/seller/product/{productId}")
 	            .buildAndExpand(product.getProductId())
 	            .toUri();
-		
-		return ResponseEntity.created(location).body("Product Added Successfully");
-	
+
+	    return ResponseEntity.created(location).build();
 	}
 	
 	@GetMapping("/product")
@@ -87,12 +88,12 @@ public class SellerController {
 //		return null;
 		
 		Optional<UserInfo> user = userRepo.findByUsername(principal.getName()); //seller
-		if(user.isEmpty()) return ResponseEntity.badRequest().body("User not found");
+		if(user.isEmpty()) return ResponseEntity.status(404).body("User not found");
 		
 		
 		//combo: user_id + product_id
 		Optional<Product> product = productRepo.findBySellerUserIdAndProductId(user.get().getUserId(), updatedProduct.getProductId());
-		if(product.isEmpty()) return ResponseEntity.badRequest().body("Product not found");
+		if(product.isEmpty()) return ResponseEntity.status(404).body("Product not found");
 		
 	
 		product.get().setCategory(updatedProduct.getCategory());
@@ -112,11 +113,11 @@ public class SellerController {
 //		return null;
 		
 		Optional<UserInfo> user = userRepo.findByUsername(principal.getName()); //seller
-		if(user.isEmpty()) return ResponseEntity.badRequest().body("User not found");
+		if(user.isEmpty()) return ResponseEntity.status(404).body("User not found");
 		
 		//combo: user_id + product_id
 		Optional<Product> product = productRepo.findBySellerUserIdAndProductId(user.get().getUserId(), productId);
-		if(product.isEmpty()) return ResponseEntity.badRequest().body("Product not found");
+		if(product.isEmpty()) return ResponseEntity.status(404).body("Product not found");
 		
 		productRepo.deleteById(productId);
 		return ResponseEntity.ok().body("Delete from Product Table..");
