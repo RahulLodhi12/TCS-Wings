@@ -1,37 +1,31 @@
 package com.wings.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private int productId;
-	
 	private String productName;
-	
 	private double price;
-	
+
 	@ManyToOne
-	@JoinColumn(name="seller_id",referencedColumnName = "userId", updatable = false)
+	@JoinColumn(name = "seller_id", referencedColumnName = "userId", updatable = false)
 	@JsonIgnore
 	private UserInfo seller;
-	
+
 	@ManyToOne
-	@JoinColumn(name="category_id",referencedColumnName = "categoryId")
+	@JoinColumn(name = "category_id", referencedColumnName = "categoryId")
 	private Category category;
-	
+
+	// Default constructor
 	public Product() {
 		super();
 	}
-	
+
+	// Updated constructor to accept a Category and UserInfo object
 	public Product(String productName, double price, UserInfo seller, Category category) {
 		this.productName = productName;
 		this.price = price;
@@ -39,6 +33,7 @@ public class Product {
 		this.category = category;
 	}
 
+	// Getters and setters
 	public int getProductId() {
 		return productId;
 	}
@@ -81,9 +76,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [productId=" + productId + ", productName=" + productName + ", price=" + price + ", seller="
-				+ seller + ", category=" + category + "]";
+		return "Product [productId=" + productId + ", productName=" + productName + ", price=" + price +
+				", seller=" + (seller != null ? seller.getUserId() : "null") + ", category=" + category + "]";
 	}
-	
-	
 }

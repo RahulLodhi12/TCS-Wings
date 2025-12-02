@@ -16,7 +16,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Component
-public class JwtService {
+public class JwtService { //OR JwtUtil
 
     public static final String SECRET = "5367566859703373367639792F423F4528482B4D625165546857605A71347";
     public static final long JWT_TOKEN_VALIDITY = 900000; // 15 minutes

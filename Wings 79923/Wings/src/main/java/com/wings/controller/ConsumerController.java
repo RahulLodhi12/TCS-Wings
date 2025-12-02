@@ -4,8 +4,6 @@ import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,7 +70,7 @@ public class ConsumerController {
 
 		
 		// check duplicate for product -> CartId + ProductId 
-	    Optional<CartProduct> existing = cpRepo.findByCartIdAndProductId(cart.getCartId(), dbProduct.get().getProductId());
+	    Optional<CartProduct> existing = cpRepo.findByCartUserUserIdAndProductProductId(cart.getCartId(), dbProduct.get().getProductId());
 
 	    if (existing.isPresent()) {
 	        return ResponseEntity.status(409).body("Product already exists in cart");
@@ -82,8 +80,8 @@ public class ConsumerController {
 		cp.setCart(cart);
 		cp.setProduct(dbProduct.get());
 		cp.setQuantity(1);
-		cp.setCartId(cart.getCartId());
-		cp.setProductId(dbProduct.get().getProductId());
+//		cp.setCartId(cart.getCartId());
+//		cp.setProductId(dbProduct.get().getProductId());
 		cpRepo.save(cp);
 		
 		return ResponseEntity.status(200).body("Product added to cart");
@@ -103,7 +101,7 @@ public class ConsumerController {
 
 	    // Fetch product from DB
 	    Optional<Product> productOpt = productRepo.findById(cp.getProduct().getProductId());
-	    if (productOpt.isEmpty()) return ResponseEntity.badRequest().body(cp.getProduct().getProductId()+cp.getProductId()+"Product not found");
+	    if (productOpt.isEmpty()) return ResponseEntity.badRequest().body("Product not found");
 
 	    Product product = productOpt.get();
 
@@ -128,8 +126,8 @@ public class ConsumerController {
 	        newCP.setCart(cart);
 	        newCP.setProduct(cp.getProduct());
 	        newCP.setQuantity(cp.getQuantity());
-	        newCP.setCartId(cart.getCartId());
-	        newCP.setProductId(cp.getProductId());
+//	        newCP.setCartId(cart.getCartId());
+//	        newCP.setProductId(cp.getProductId());
 	        cpRepo.save(newCP);
 	        return ResponseEntity.ok("New Product added to cart");
 	    }

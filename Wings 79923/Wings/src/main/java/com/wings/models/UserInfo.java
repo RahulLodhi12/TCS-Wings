@@ -4,77 +4,81 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
+
 public class UserInfo {
-	private static final long serialVersionUID = 5536306799835655715L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int userId;
-	private String username;
-	private String password;
-	
-	private String roles;
-	
-	public UserInfo() {
-		
-	}
-	
-	public UserInfo(String username, String password, String roles) {
-		this.username = username;
-		this.password = password;
-		this.roles = roles;
-	}
-	
-	public UserInfo(int userId, String username, String password, String roles) {
-		this.userId = userId;
-		this.username = username;
-		this.password = password;
-		this.roles = roles;
-	}
 
-	public int getUserId() {
-		return userId;
-	}
+    private static final long serialVersionUID = 5536306799835655715L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int userId;
+    private String username;
+    private String password;
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+    private String roles;
 
-	public String getUsername() {
-		return username;
-	}
+    // Constructors
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public UserInfo() {
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public UserInfo(String username,String password, String roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public UserInfo(int userId,String username,String password, String roles) {
+        this.userId=userId;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
 
-	public String getRoles() {
-		return roles;
-	}
+    //Getters & Setters
 
-	public void setRoles(String roles) {
-		this.roles = roles;
-	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	@Override
-	public String toString() {
-		return "UserInfo [userId=" + userId + ", username=" + username + ", password=" + password + ", roles=" + roles
-				+ "]";
-	}
-	
-	
-	
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles='" + roles + '\'' +
+                '}';
+    }
 }

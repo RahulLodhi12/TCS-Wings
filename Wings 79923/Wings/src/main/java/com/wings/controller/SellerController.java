@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.wings.models.Category;
 //import com.wings.models.Category;
 import com.wings.models.Product;
 import com.wings.repository.CategoryRepo;
@@ -41,11 +42,21 @@ public class SellerController {
 	
 	@PostMapping("/product")
 	public ResponseEntity<Object> postProduct(Principal principal, @RequestBody Product product){
-		 //Fetch logged-in user (seller)
 	    Optional<UserInfo> seller = userRepo.findByUsername(principal.getName());
 	    if(seller.isEmpty()) return ResponseEntity.status(404).body("User not found");
 
-	    //Attach seller to product
+	    
+	    Optional<Category> categoryOpt = categoryRepo.findByCategoryName(product.getCategory().getCategoryName());
+	    if(categoryOpt.isEmpty()) {
+	    	Category category = new Category();
+	    	category.setCategoryName(product.getCategory().getCategoryName());
+	    	categoryRepo.save(category);
+	    }
+	    
+	    product.setCategory(categoryOpt.get()); //categoryOpt.isPresent()
+	    product.setPrice(product.getPrice());
+	    product.setProductId(product.getProductId());
+	    product.setProductName(product.getProductName());
 	    product.setSeller(seller.get());
 
 	    productRepo.save(product);
@@ -95,8 +106,15 @@ public class SellerController {
 		Optional<Product> product = productRepo.findBySellerUserIdAndProductId(user.get().getUserId(), updatedProduct.getProductId());
 		if(product.isEmpty()) return ResponseEntity.status(404).body("Product not found");
 		
+		
+		Optional<Category> categoryOpt = categoryRepo.findByCategoryName(updatedProduct.getCategory().getCategoryName());
+	    if(categoryOpt.isEmpty()) {
+	    	Category category = new Category();
+	    	category.setCategoryName(updatedProduct.getCategory().getCategoryName());
+	    	categoryRepo.save(category);
+	    }
 	
-		product.get().setCategory(updatedProduct.getCategory());
+		product.get().setCategory(categoryOpt.get());
 		product.get().setPrice(updatedProduct.getPrice());
 		product.get().setProductId(updatedProduct.getProductId());
 		product.get().setProductName(updatedProduct.getProductName());
