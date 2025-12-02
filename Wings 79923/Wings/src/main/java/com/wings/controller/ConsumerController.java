@@ -80,8 +80,6 @@ public class ConsumerController {
 		cp.setCart(cart);
 		cp.setProduct(dbProduct.get());
 		cp.setQuantity(1);
-//		cp.setCartId(cart.getCartId());
-//		cp.setProductId(dbProduct.get().getProductId());
 		cpRepo.save(cp);
 		
 		return ResponseEntity.status(200).body("Product added to cart");
@@ -126,13 +124,9 @@ public class ConsumerController {
 	        newCP.setCart(cart);
 	        newCP.setProduct(cp.getProduct());
 	        newCP.setQuantity(cp.getQuantity());
-//	        newCP.setCartId(cart.getCartId());
-//	        newCP.setProductId(cp.getProductId());
 	        cpRepo.save(newCP);
 	        return ResponseEntity.ok("New Product added to cart");
 	    }
-	    
-//	    return ResponseEntity.badRequest().body("Error..");
 	    
 	}
 	

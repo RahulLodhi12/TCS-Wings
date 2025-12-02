@@ -29,14 +29,12 @@ public class UserInfoUserDetails implements UserDetails {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 //		return null;
 		return List.of(new SimpleGrantedAuthority(userInfo.getRoles()));
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return userInfo.getPassword();
 	}
 
@@ -46,4 +44,23 @@ public class UserInfoUserDetails implements UserDetails {
 		return userInfo.getUsername();
 	}
 
+	@Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
